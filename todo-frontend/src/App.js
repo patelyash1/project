@@ -191,6 +191,7 @@ function App() {
   const [tasks, setTasks] = useState([]);
   const [filter, setFilter] = useState('all');
   const [darkMode, setDarkMode] = useState(true);
+  const [isConfirmingClear, setIsConfirmingClear] = useState(false);
 
   // 👇 API URL CONFIGURATION
   // We store the URL in a variable so it's easy to change later if needed.
@@ -245,16 +246,57 @@ function App() {
    * Batch deletes all completed tasks.
    * Uses Promise.all to ensure all API calls finish before updating UI.
    */
-  const clearCompleted = () => {
-    const completed = tasks.filter(t => t.completed);
-    if (completed.length === 0) return;
+  // const clearCompleted = () => {
+  //   const completed = tasks.filter(t => t.completed);
+  //   if (completed.length === 0) return;
 
-    if (window.confirm(`Delete ${completed.length} completed tasks?`)) {
-      Promise.all(completed.map(t => axios.delete(`${API_URL}/${t.id}`)))
-        .then(() => setTasks(tasks.filter(t => !t.completed)))
-        .catch(error => console.error("Batch delete failed:", error));
-    }
-  };
+  //   if (window.confirm(`Delete ${completed.length} completed tasks?`)) {
+  //     Promise.all(completed.map(t => axios.delete(`${API_URL}/${t.id}`)))
+  //       .then(() => setTasks(tasks.filter(t => !t.completed)))
+  //       .catch(error => console.error("Batch delete failed:", error));
+  //   }
+  // }; // prev using alert box of java to confirm to delete all completed tasks 
+ 
+
+
+const clearCompleted = () => {
+  
+  if (!isConfirmingClear) {
+    setIsConfirmingClear(true);
+    
+    setTimeout(() => setIsConfirmingClear(false), 3000);
+    return;
+  }
+
+  
+  const completed = tasks.filter(t => t.completed);
+  if (completed.length === 0) return;
+
+  Promise.all(completed.map(t => axios.delete(`${API_URL}/${t.id}`)))
+    .then(() => {
+      setTasks(tasks.filter(t => !t.completed));
+      setIsConfirmingClear(false); 
+    })
+    .catch(error => console.error("Batch delete failed:", error));
+};
+
+
+
+{tasks.some(t => t.completed) && (
+  <button
+    onClick={clearCompleted}
+    style={{
+      // ... keep your existing styles ...
+      // Change color to Orange if confirming
+      background: isConfirmingClear 
+        ? "linear-gradient(135deg, #FF9966 0%, #FF5E62 100%)"
+        : "linear-gradient(135deg, #FF416C 0%, #FF4B2B 100%)", 
+    }}
+  >
+    {isConfirmingClear ? "Click Again to Confirm" : "Clear Completed"}
+  </button>
+)}
+
 
   // --- Helpers & Logic ---
 

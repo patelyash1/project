@@ -400,7 +400,6 @@
 // export default App;
 // // Vercel Deployment Test 1,finale
 
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import TaskInput from './TaskInput';
@@ -514,7 +513,23 @@ function App() {
       <div style={{ maxWidth: "500px", margin: "0 auto", textAlign: "center", position: "relative", zIndex: 1 }}>
 
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "30px" }}>
-          <h1 style={{ margin: 0, textShadow: currentBg ? "2px 2px 4px rgba(0,0,0,0.8)" : "none" }}>My To-Do App</h1>
+         
+         
+         
+          {/* /<h1 style={{ margin: 0, textShadow: currentBg ? "2px 2px 4px rgba(0,0,0,0.8)" : "none" }}>My To-Do App</h1> */}
+         <h1 style={{ margin: 0, 
+  // 👇 THE FIX:
+  // If we have an image (currentBg), force title to WHITE.
+  // Otherwise, use the theme color (Black/White).
+  color: currentBg ? "white" : theme.text,
+  // Add a strong shadow so it's readable on bright images too
+  textShadow: currentBg ? "0px 2px 10px rgba(0,0,0,0.8)" : "none" 
+}}>
+  My To-Do App
+</h1>
+         
+         
+         
           <button
             onClick={() => setDarkMode(!darkMode)}
             style={{ background: "none", border: "none", fontSize: "1.5rem", cursor: "pointer" }}

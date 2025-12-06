@@ -1,7 +1,7 @@
-package com.example.todoapp.model; // (Keep your existing package name)
+package com.example.todoapp.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDate; // 👈 IMPORT THIS!
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "tasks")
@@ -14,7 +14,7 @@ public class Task {
     private String title;
     private boolean completed;
 
-    // 👇 NEW FIELD 👇
+
     private LocalDate dueDate;
 
     // Constructors
@@ -26,7 +26,7 @@ public class Task {
         this.dueDate = dueDate;
     }
 
-    // --- GETTERS AND SETTERS ---
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -36,7 +36,6 @@ public class Task {
     public boolean isCompleted() { return completed; }
     public void setCompleted(boolean completed) { this.completed = completed; }
 
-    // 👇 NEW GETTER/SETTER 👇
     public LocalDate getDueDate() { return dueDate; }
     public void setDueDate(LocalDate dueDate) { this.dueDate = dueDate; }
 }

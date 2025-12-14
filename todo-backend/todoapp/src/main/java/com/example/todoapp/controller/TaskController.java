@@ -7,40 +7,44 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+
 @RestController
 @RequestMapping("/tasks")
-@CrossOrigin(origins = "*") // allow React frontend
+@CrossOrigin(origins = "*") // Allows React to connect
 public class TaskController {
 
     @Autowired
     private TaskRepository taskRepository;
 
-    // ✅ GET all tasks
     @GetMapping
     public List<Task> getAllTasks() {
         return taskRepository.findAll();
     }
 
-    // ✅ POST: Add new task
     @PostMapping
     public Task createTask(@RequestBody Task task) {
         return taskRepository.save(task);
     }
 
-    // ✅ PUT: Update (mark complete/incomplete)
+    // 👇 UPDATED: Handles Editing Tasks
     @PutMapping("/{id}")
-    public Task updateTask(@PathVariable Long id, @RequestBody Task updatedTask) {
+    public Task updateTask(@PathVariable Long id, @RequestBody Task updatedDetails) {
         Optional<Task> optionalTask = taskRepository.findById(id);
         if (optionalTask.isPresent()) {
             Task existingTask = optionalTask.get();
-            existingTask.setTitle(updatedTask.getTitle());
-            existingTask.setCompleted(updatedTask.isCompleted());
+
+            existingTask.setTitle(updatedDetails.getTitle());
+            existingTask.setCompleted(updatedDetails.isCompleted());
+            existingTask.setDueDate(updatedDetails.getDueDate());
+            existingTask.setDescription(updatedDetails.getDescription());
+            existingTask.setFolder(updatedDetails.getFolder());
+            existingTask.setSubtasks(updatedDetails.getSubtasks());
+
             return taskRepository.save(existingTask);
         }
         return null;
     }
 
-    // ✅ DELETE: Remove task
     @DeleteMapping("/{id}")
     public void deleteTask(@PathVariable Long id) {
         taskRepository.deleteById(id);
